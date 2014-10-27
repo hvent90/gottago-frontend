@@ -1,0 +1,95 @@
+
+<ion-header-bar align-title="left" class="bar-calm">
+    <div class="row buttons" ng-controller="MainCtrl">
+      <button class="col-25 button button-assertive icon ion-alert" ng-click="emergency()"></button>
+      <div class="col">
+      </div>
+      <button class="col-25 button button-dark icon ion-help" ng-click="pingTenants()"></button>
+    </div>
+</ion-header-bar>
+
+<ion-tabs class="tabs-light" ng-controller="TenantController">
+  <ion-tab title="Tenants" icon-on="ion-ios7-person" icon-off="ion-ios7-person-outline">
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <h2 class="tenant-name" ng-click="logResult()">Henry Ventura</h2>
+          <div class="row">
+            <button id="shower" ng-class="showerStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col activity-status"><i class="icon ion-ios7-rainy"></i>
+            </button>
+            <button id="pee" ng-class="peeStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col activity-status"><i class="icon ion-flask"></i>
+            </button>
+            <button id="poop" ng-class="poopStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col activity-status"><i class="icon ion-ios7-trash"></i>
+            </button>
+          </div>
+        </ion-item>
+        <ion-item>
+          <h2 class="tenant-name" ng-click="logResult()">Henry Ventura</h2>
+          <div class="row">
+            <button id="shower" ng-class="showerStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col"><i class="icon ion-ios7-rainy"></i>
+            </button>
+            <button id="pee" ng-class="peeStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col"><i class="icon ion-flask"></i>
+            </button>
+            <button id="poop" ng-class="poopStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col"><i class="icon ion-ios7-trash"></i>
+            </button>
+          </div>
+        </ion-item>
+        <ion-item>
+          <h2 class="tenant-name" ng-click="logResult()">Henry Ventura</h2>
+          <div class="row">
+            <button id="shower" ng-class="showerStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col"><i class="icon ion-ios7-rainy"></i>
+            </button>
+            <button id="pee" ng-class="peeStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col"><i class="icon ion-flask"></i>
+            </button>
+            <button id="poop" ng-class="poopStatus" ng-click="showDetails($event)" style="margin: 5px;" class="button col"><i class="icon ion-ios7-trash"></i>
+            </button>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-tab>
+  <ion-tab title="Houses" icon-on="ion-ios7-home" icon-off="ion-ios7-home-outline" ng-controller='MainCtrl'>
+    <ion-content>
+
+    </ion-content>
+  </ion-tab>
+  <ion-tab title="Settings" icon-on="ion-ios7-information" icon-off="ion-ios7-information-outline">
+    <ion-content>
+      <h1>Settings</h1>
+      <div ng-controller='MainCtrl' ng-model"name" ng-click="openModal()">
+        <p>{{ user.name }}</p>
+      </div>
+      <div ng-controller='MainCtrl' ng-model="email" ng-click="openModal()">
+        <p>{{ user.email }}</p>
+      </div>
+      <div ng-controller='MainCtrl' ng-model="nickname" ng-click="openModal()">
+        <p>{{ user.nickname }}</p>
+      </div>
+      <div ng-controller='MainCtrl' ng-click="openModal()">
+        <p>change password</p>
+      </div>
+    </ion-content>
+  </ion-tab>
+</ion-tabs>
+
+<script id="change-name.html" type="text/ng-template">
+  <div class="modal">
+    <ion-header-bar>
+      <h1 class="title">Edit</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Current:</span>
+          <p>{{ user.name }}</p>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">New:</span>
+          <input type="text" ng-model="user.name">
+        </label>
+      </div>
+
+      <button class="button button-full button-energized" ng-click="closeModal()">Done</button>
+    </ion-content>
+  </div>
+</script>

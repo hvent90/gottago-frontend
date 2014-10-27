@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html ng-app="starter">
+
+  <head>
+    <link data-require="ionic@1.0.0-beta6" data-semver="1.0.0-beta6" rel="stylesheet" href="http://code.ionicframework.com/1.0.0-beta.6/css/ionic.css" />
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css">
+    <script data-require="ionic@1.0.0-beta6" data-semver="1.0.0-beta6" src="http://code.ionicframework.com/1.0.0-beta.6/js/ionic.bundle.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/script.js"></script>
+  </head>
+
+  <body>
+
+    <ion-nav-view></ion-nav-view>
+
+    <script type="text/ng-template" id="sign-in.html">
+      <ion-content ng-controller="SignInController" class="center">
+            <button ng-click="loginModal()" class="button button-outline button-positive">Log in</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button ng-click="registerModal()" class="button button-outline button-balanced">Register</button>
+      </ion-content>
+    </script>
+
+    <script type="text/ng-template" id="home.html">
+      <ion-header-bar align-title="left" class="bleh">
+          <div class="row buttons" ng-controller="MainCtrl">
+            <button class="col-10 button button-assertive icon ion-alert" ng-click="emergency()"></button>
+            <div class="col">
+            </div>
+            <button class="col-10 button button-dark icon ion-help" ng-click="pingTenants()"></button>
+          </div>
+      </ion-header-bar>
+
+      <ion-tabs class="tabs-light" delegate-handle="tenants-tab" ng-controller="TenantController">
+        <ion-tab title="Tenants" ng-click="updateTenants()" icon-on="ion-ios7-person" icon-off="ion-ios7-person-outline">
+          <ion-content>
+            <ion-list>
+              <ion-item id="tenant-{{tenant.id}}" ng-repeat="tenant in tenants">
+                <div class="row">
+                  <div class="col">
+                    <div class="row">
+                      <h2 class="tenant-name" ng-click="logResult()">{{ tenant.nickname }}</h2>
+                    </div>
+                    <div class="row">
+                      <i class="icon ion-sad"></i>
+                    </div>
+                  </div>
+                  <div id="shower" ng-class="ascertainUrgency(tenant.shower)" style="padding: 5px; margin: 5px; border-radius: 40px" class="tenant-{{tenant.id}}-shower button col activity-status"><img class="svg-icon-tenant" style="width: 80px; margin-bottom: -20px;" src="img/clouds.svg"></img>
+                  </div>
+                  <div id="pee" ng-class="ascertainUrgency(tenant.pee)" style="padding: 5px; margin: 5px; border-radius: 40px" class="tenant-{{tenant.id}}-pee button col activity-status"><img class="svg-icon-tenant" style="width: 70px; margin-bottom: -20px;" src="img/lemon-dark.svg"></img>
+                  </div>
+                  <div id="poop" ng-class="ascertainUrgency(tenant.poop)" style="padding: 5px; margin: 5px; border-radius: 40px" class="tenant-{{tenant.id}}-poop button col activity-status"><img class="svg-icon-tenant" style="width: 80px; margin-bottom: -20px;" src="img/turtle.svg"></img>
+                  </div>
+                </div>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+          <ion-footer-bar style="height: 70px;">
+            <div class="row">
+              <button id="shower" ng-class="ascertainUrgency(userShower)" ng-click="showDetails($event, tenant)" style="margin: 5px;" class="button col activity-status"><img style="width: 80px; margin-top: -35px;" class="svg-icon-tenant" src="img/clouds.svg"></img>
+              </button>
+              <button id="pee" ng-class="ascertainUrgency(userPee)" ng-click="showDetails($event, tenant)" style="margin: 5px;" class="button col activity-status"><img style="width: 60px; margin-bottom: 0px;" class="svg-icon-tenant" src="img/lemon-dark.svg"></img>
+              </button>
+              <button id="poop" ng-class="ascertainUrgency(userPoop)" ng-click="showDetails($event, tenant)" style="margin: 5px;" class="button col activity-status"><img style="width: 80px; margin-top: -20px;" class="svg-icon-tenant" src="img/turtle.svg"></img>
+              </button>
+            </div>
+          </ion-footer-bar>
+        </ion-tab>
+        <ion-tab title="Houses" icon-on="ion-home" delegate-handle="houses-tab" icon-off="ion-home" ng-controller='HouseController'>
+        <ion-content>
+          <div class="card" ng-click="selectHouse(house.id)" ng-repeat="house in houses">
+            <div ng-class="ascertainSelected(house)" id="house-{{house.id}}" class="item item-divider bar bar-royal">
+              Selected
+            </div>
+            <div class="item item-text-wrap">
+              <div class="row">
+                <div class="houses col-90">
+                  <h2>{{house.name}}</h2>
+                </div>
+                <div class="col-10" style="text-align: right;">
+                  <i ng-click="leaveHouse(house)" class="icon ion-close"></i>
+                </div>
+              </div>
+            </div>
+            <div class="item item-divider">
+              <div class="row">
+                <div class="col">
+                  <i class="icon ion-pound"></i> {{house.id}}
+                </div>
+                <div class="col">
+                  <i class="icon ion-key"></i> {{house.key}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-content>
+        <ion-footer-bar style="height: 70px;">
+            <div class="row">
+              <button ng-click="joinHouseModal()" style="margin: 5px;" class="button col button-positive"><i class="icon ion-home"></i><i class="icon ion-arrow-left-a"></i>
+              </button>
+              <button ng-click="createHouseModal()" style="margin: 5px;" class="button col button-balanced"><i class="icon ion-home"></i><i class="icon ion-plus"></i>
+              </button>
+            </div>
+          </ion-footer-bar>
+        </ion-tab>
+        <ion-tab title="Settings" icon-on="ion-ios7-information" icon-off="ion-ios7-information-outline">
+          <ion-content>
+            <h1>Settings</h1>
+            <div ng-controller='MainCtrl' ng-model"name" ng-click="openModal()">
+              <p>{{ user.name }}</p>
+            </div>
+            <div ng-controller='MainCtrl' ng-model="email" ng-click="openModal()">
+              <p>{{ user.email }}</p>
+            </div>
+            <div ng-controller='MainCtrl' ng-model="nickname" ng-click="openModal()">
+              <p>{{ user.nickname }}</p>
+            </div>
+            <div ng-controller='MainCtrl' ng-click="openModal()">
+              <p>change password</p>
+            </div>
+          </ion-content>
+        </ion-tab>
+      </ion-tabs>
+    </script>
+
+    <script id="log-in.html" type="text/ng-template">
+    <div class="modal">
+      <ion-view title="Sign-In">
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Email</span>
+              <input type="text" ng-model="user.email">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Password</span>
+              <input type="password" ng-model="user.password">
+            </label>
+          </div>
+          <div class="padding">
+            <div class="row">
+              <button class="col-75 button button-block button-positive" ng-click="signIn(user)">
+                Log in
+              </button>&nbsp;&nbsp;&nbsp;
+              <button class="col-15 button button-full button-assertive" ng-click="closeModal()">Cancel</button>
+            </div>
+            <p class="text-center">
+              <a href="#/forgot-password">Forgot password</a>
+            </p>
+            {{ errors }}
+          </div>
+        </ion-content>
+      </ion-view>
+      </div>
+    </script>
+
+    <script id="register.html" type="text/ng-template">
+    <div class="modal">
+      <ion-view title="Register">
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Email</span>
+              <input type="text" ng-model="user.email">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Nickname</span>
+              <input type="text" ng-model="user.nickname">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Password</span>
+              <input type="password" ng-model="user.password">
+            </label>
+          </div>
+          <div class="padding">
+            <div class="row">
+              <button class="col-75 button button-block button-balanced" ng-click="register(user)">
+                Register
+              </button>&nbsp;&nbsp;&nbsp;
+              <button class="col-15 button button-full button-assertive" ng-click="closeModal()">Cancel</button>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+      </div>
+    </script>
+
+    <script id="join-house.html" type="text/ng-template">
+    <div class="modal">
+      <ion-view title="Join House">
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">ID</span><i class="icon ion-pound placeholder-icon"></i>
+              <input type="text" ng-model="house.house_id">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Key</span><i class="icon ion-key placeholder-icon"></i>
+              <input type="text" ng-model="house.key">
+            </label>
+          </div>
+          <div class="padding">
+            <div class="row">
+              <button class="col-75 button button-block button-positive" ng-click="joinHouse(house)">
+                Enter House
+              </button>&nbsp;&nbsp;&nbsp;
+              <button class="col-15 button button-full button-assertive" ng-click="closeModal()">Cancel</button>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+      </div>
+    </script>
+
+    <script id="create-house.html" type="text/ng-template">
+    <div class="modal">
+      <ion-view title="Create House">
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Name</span>
+              <input type="text" ng-model="house.name">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Key</span><i class="icon ion-key placeholder-icon"></i>
+              <input type="text" ng-model="house.key">
+            </label>
+          </div>
+          <div class="padding">
+            <div class="row">
+              <button class="col-75 button button-block button-positive" ng-click="createHouse(house)">
+                Create House
+              </button>&nbsp;&nbsp;&nbsp;
+              <button class="col-15 button button-full button-assertive" ng-click="closeModal()">Cancel</button>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+      </div>
+    </script>
+
+    <script id="change-name.html" type="text/ng-template">
+      <div class="modal">
+        <ion-header-bar>
+          <h1 class="title">Edit</h1>
+        </ion-header-bar>
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Current:</span>
+              <p>{{ user.name }}</p>
+            </label>
+            <label class="item item-input">
+              <span class="input-label">New:</span>
+              <input type="text" ng-model="user.name">
+            </label>
+          </div>
+
+          <button class="button button-full button-energized" ng-click="closeModal()">Done</button>
+        </ion-content>
+      </div>
+    </script>
+  </body>
+</html>
